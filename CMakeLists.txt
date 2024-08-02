@@ -105,7 +105,6 @@ endif()
 
 add_subdirectory(deps/txiki EXCLUDE_FROM_ALL)
 add_subdirectory(deps/lvgl EXCLUDE_FROM_ALL)
-add_subdirectory(deps/lv_drivers EXCLUDE_FROM_ALL)
 
 target_include_directories(lvgljs PUBLIC
     ${LVGL_PATH}
@@ -124,11 +123,9 @@ target_include_directories(lvgljs PUBLIC
 target_link_libraries(lvgljs PUBLIC
     tjs
     lvgl
-    lv_drivers
 )
 
 if(BUILD_LVGL_SIMULATOR)
     find_package(SDL2 REQUIRED)
-    target_include_directories(lv_drivers PUBLIC ${SDL2_INCLUDE_DIRS})
     target_link_libraries(lvgljs PUBLIC ${SDL2_LIBRARIES})
 endif()
