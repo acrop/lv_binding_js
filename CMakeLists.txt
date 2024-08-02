@@ -92,6 +92,9 @@ if(BUILD_LVGL_SIMULATOR)
     endif()
     set(BUILD_WITH_MIMALLOC OFF) # TODO: SDL and mimalloc don't play well together
     add_definitions(-DIS_SIM)
+    # LVGL v9 ships its own SDL drivers, so the lvgl target needs the SDL2
+    # headers too. Find SDL2 before adding the lvgl subdirectory.
+    find_package(SDL2 REQUIRED)
     target_sources(lvgljs PRIVATE
         src/engine/hal/simulator/simulator.cpp
         src/engine/hal/simulator/mouse_cursor_icon.c
@@ -111,9 +114,12 @@ else()
 endif()
 add_subdirectory(deps/lvgl EXCLUDE_FROM_ALL)
 
+if(BUILD_LVGL_SIMULATOR)
+    target_include_directories(lvgl PRIVATE ${SDL2_INCLUDE_DIRS})
+endif()
+
 target_include_directories(lvgljs PUBLIC
     ${LVGL_PATH}
-    deps
     src/
     src/engine
     src/engine/hal
@@ -131,6 +137,5 @@ target_link_libraries(lvgljs PUBLIC
 )
 
 if(BUILD_LVGL_SIMULATOR)
-    find_package(SDL2 REQUIRED)
     target_link_libraries(lvgljs PUBLIC ${SDL2_LIBRARIES})
 endif()
