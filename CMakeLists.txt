@@ -75,6 +75,7 @@ add_executable(lvgljs
 )
 
 if(${CMAKE_BUILD_TYPE} MATCHES Simulator)
+    add_compile_options(-Wno-error=unused-but-set-variable)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -Wall -g -ggdb -std=c++14")
     set(BUILD_WITH_MIMALLOC OFF) # TODO: SDL and mimalloc don't play well together
     add_definitions(-DIS_SIM)
