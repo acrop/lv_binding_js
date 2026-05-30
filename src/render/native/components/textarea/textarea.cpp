@@ -1,6 +1,8 @@
 
 #include "textarea.hpp"
 
+#include "native/core/style/font/font.hpp"
+
 Textarea::Textarea(std::string uid, lv_obj_t* parent): BasicComponent(uid) {
     this->type = COMP_TYPE_TEXTAREA;
     this->uid = uid;
@@ -29,6 +31,23 @@ void Textarea::raiseKeyboard (lv_event_t* event) {
 
     lv_keyboard_set_textarea(keyboard, comp->instance);
     lv_obj_set_style_height(keyboard, height * 2 / 3, 0);
+
+#if LV_USE_IME_PINYIN
+    /* Wrap the keyboard with a Pinyin IME so Chinese can be typed. The IME adds
+     * a candidate panel above the keyboard and feeds the chosen Hanzi into the
+     * textarea. */
+    lv_obj_t* ime = lv_ime_pinyin_create(lv_layer_top());
+    comp->pinyin_ime = ime;
+    lv_ime_pinyin_set_keyboard(ime, keyboard);
+
+    /* The IME and its candidate panel live on the top layer, which only carries
+     * the Latin-only LV_FONT_DEFAULT. Give them a CJK-fallback font explicitly
+     * (builtin_font_list[4] == montserrat_16 + TTF fallback) so the Chinese
+     * candidates render instead of showing placeholder boxes. */
+    lv_obj_set_style_text_font(ime, &builtin_font_list[4], 0);
+    lv_obj_set_style_text_font(lv_ime_pinyin_get_cand_panel(ime), &builtin_font_list[4], 0);
+#endif
+
     lv_obj_update_layout(lv_layer_top());   /*Be sure the sizes are recalculated*/
 
     lv_obj_set_style_height(GetWindowInstance(), height - lv_obj_get_height(keyboard), 0);
@@ -44,6 +63,13 @@ void Textarea::hideKeyboard (lv_event_t * event) {
 
     lv_keyboard_set_textarea(comp->keyboard, nullptr);
     lv_obj_delete_async(comp->keyboard);
+
+#if LV_USE_IME_PINYIN
+    if (comp->pinyin_ime != nullptr) {
+        lv_obj_delete_async(comp->pinyin_ime);
+        comp->pinyin_ime = nullptr;
+    }
+#endif
 
     lv_display_t* disp_default = lv_display_get_default();
     lv_obj_set_style_height(GetWindowInstance(), lv_display_get_vertical_resolution(disp_default), 0);

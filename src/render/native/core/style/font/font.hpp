@@ -4,30 +4,16 @@
 
 #include <vector>
 
+#define BUILTIN_FONT_COUNT 21
 
-static const lv_font_t builtin_font_list[] = {
-    lv_font_montserrat_8,
-    lv_font_montserrat_10,
-    lv_font_montserrat_12,
-    lv_font_montserrat_14,
-    lv_font_montserrat_16,
-    lv_font_montserrat_18,
-    lv_font_montserrat_20,
-    lv_font_montserrat_22,
-    lv_font_montserrat_24,
-    lv_font_montserrat_26,
-    lv_font_montserrat_28,
-    lv_font_montserrat_30,
-    lv_font_montserrat_32,
-    lv_font_montserrat_34,
-    lv_font_montserrat_36,
-    lv_font_montserrat_38,
-    lv_font_montserrat_40,
-    lv_font_montserrat_42,
-    lv_font_montserrat_44,
-    lv_font_montserrat_46,
-    lv_font_montserrat_48,
-};
+extern lv_font_t builtin_font_list[BUILTIN_FONT_COUNT];
+
+/* Load a CJK TTF (e.g. a system font) once and attach a size-matched fallback
+ * to every built-in Montserrat font, so Chinese/CJK glyphs render with full
+ * coverage even though the primary fonts are Latin-only. The TTF data is read
+ * a single time and shared across all sizes. Safe to call once after lv_init().
+ * Falls back silently (Latin only) if the path can't be opened. */
+void InitBuiltinFonts(const char* cjk_ttf_path);
 
 void CompSetFontSize (lv_obj_t* comp, lv_style_t* style, JSContext* ctx, JSValue obj);
 

@@ -11,6 +11,8 @@ class Textarea final : public BasicComponent {
 
   lv_obj_t* keyboard = nullptr;
 
+  lv_obj_t* pinyin_ime = nullptr;
+
   Textarea(std::string uid, lv_obj_t* parent = nullptr);
 
   void setOneLine (bool payload);

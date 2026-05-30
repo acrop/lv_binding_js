@@ -15,10 +15,11 @@ function App () {
                     type: EAlignType.ALIGN_TOP_MID,
                     pos: [0, 10]
                 }}
+                placeholder={'请输入中文'}
                 onChange={e => setValue(e.value)}
                 value={value}
                 onFocus={e => console.log('input focus')}
-                autoKeyBoard={false}
+                autoKeyBoard={true}
             />
             <View
                 style={style.view1}
