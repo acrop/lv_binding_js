@@ -79,7 +79,7 @@ static JSValue NativeCompSetArcImage(JSContext *ctx, JSValueConst this_val, int 
 };
 
 static const JSCFunctionListEntry ComponentProtoFuncs[] = {
-    TJS_CFUNC_DEF("nativeSetStyle", 0, NativeCompSetStyle),
+    TJS_CFUNC_DEF("nativeSetStyle", 5, NativeCompSetStyle),
     TJS_CFUNC_DEF("addEventListener", 0, NativeCompAddEventListener),
     TJS_CFUNC_DEF("setRange", 0, NativeCompSetRange),
     TJS_CFUNC_DEF("setValue", 0, NativeCompSetValue),
@@ -90,12 +90,12 @@ static const JSCFunctionListEntry ComponentProtoFuncs[] = {
     TJS_CFUNC_DEF("setRotation", 0, NativeCompSetRotation),
     TJS_CFUNC_DEF("setMode", 0, NativeCompSetMode),
     TJS_CFUNC_DEF("setChangeRate", 0, NativeCompSetChangeRate),
-    TJS_CFUNC_DEF("align", 0, NativeCompSetAlign),
-    TJS_CFUNC_DEF("alignTo", 0, NativeCompSetAlignTo),
+    TJS_CFUNC_DEF("align", 2, NativeCompSetAlign),
+    TJS_CFUNC_DEF("alignTo", 3, NativeCompSetAlignTo),
     JS_OBJECT_DEF("style", style_funcs, countof(style_funcs), JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE),
     TJS_CFUNC_DEF("getBoundingClientRect", 0, GetStyleBoundClinetRect),
-    TJS_CFUNC_DEF("setBackgroundImage", 0, NativeCompSetBackgroundImage),
-    TJS_CFUNC_DEF("setArcImage", 0, NativeCompSetArcImage),
+    TJS_CFUNC_DEF("setBackgroundImage", 3, NativeCompSetBackgroundImage),
+    TJS_CFUNC_DEF("setArcImage", 3, NativeCompSetArcImage),
     TJS_CFUNC_DEF("moveToFront", 0, NativeCompMoveToFront),
     TJS_CFUNC_DEF("moveToBackground", 0, NativeCompMoveToBackground),
     TJS_CFUNC_DEF("scrollIntoView", 0, NativeCompScrollIntoView),

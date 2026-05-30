@@ -11,7 +11,7 @@ WRAPPED_INSERT_CHILD(Mask,"Mask")
 WRAPPED_JS_CLOSE_COMPONENT(Mask, "Mask")
 
 static const JSCFunctionListEntry ComponentProtoFuncs[] = {
-    TJS_CFUNC_DEF("nativeSetStyle", 0, NativeCompSetStyle),
+    TJS_CFUNC_DEF("nativeSetStyle", 5, NativeCompSetStyle),
     TJS_CFUNC_DEF("addEventListener", 0, NativeCompAddEventListener),
     TJS_CFUNC_DEF("removeChild", 0, NativeCompRemoveChild),
     TJS_CFUNC_DEF("appendChild", 0, NativeCompAppendChild),

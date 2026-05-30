@@ -68,13 +68,13 @@ static JSValue NativeCompSetVisibleRowCount(JSContext *ctx, JSValueConst this_va
 };
 
 static const JSCFunctionListEntry ComponentProtoFuncs[] = {
-    TJS_CFUNC_DEF("nativeSetStyle", 0, NativeCompSetStyle),
+    TJS_CFUNC_DEF("nativeSetStyle", 5, NativeCompSetStyle),
     TJS_CFUNC_DEF("addEventListener", 0, NativeCompAddEventListener),
-    TJS_CFUNC_DEF("align", 0, NativeCompSetAlign),
-    TJS_CFUNC_DEF("alignTo", 0, NativeCompSetAlignTo),
+    TJS_CFUNC_DEF("align", 2, NativeCompSetAlign),
+    TJS_CFUNC_DEF("alignTo", 3, NativeCompSetAlignTo),
     JS_OBJECT_DEF("style", style_funcs, countof(style_funcs), JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE),
     TJS_CFUNC_DEF("getBoundingClientRect", 0, GetStyleBoundClinetRect),
-    TJS_CFUNC_DEF("setOptions", 0, NativeCompSetOptions),
+    TJS_CFUNC_DEF("setOptions", 3, NativeCompSetOptions),
     TJS_CFUNC_DEF("setSelectIndex", 0, NativeCompSetSelectIndex),
     TJS_CFUNC_DEF("setVisibleRowCount", 0, NativeCompSetVisibleRowCount),
     TJS_CFUNC_DEF("moveToFront", 0, NativeCompMoveToFront),

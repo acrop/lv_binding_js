@@ -89,15 +89,15 @@ static JSValue NativeCompSetShownMonth (JSContext *ctx, JSValueConst this_val, i
 };
 
 static const JSCFunctionListEntry ComponentProtoFuncs[] = {
-    TJS_CFUNC_DEF("nativeSetStyle", 0, NativeCompSetStyle),
+    TJS_CFUNC_DEF("nativeSetStyle", 5, NativeCompSetStyle),
     TJS_CFUNC_DEF("addEventListener", 0, NativeCompAddEventListener),
-    TJS_CFUNC_DEF("align", 0, NativeCompSetAlign),
-    TJS_CFUNC_DEF("alignTo", 0, NativeCompSetAlignTo),
+    TJS_CFUNC_DEF("align", 2, NativeCompSetAlign),
+    TJS_CFUNC_DEF("alignTo", 3, NativeCompSetAlignTo),
     TJS_CFUNC_DEF("getBoundingClientRect", 0, GetStyleBoundClinetRect),
     JS_OBJECT_DEF("style", style_funcs, countof(style_funcs), JS_PROP_WRITABLE | JS_PROP_CONFIGURABLE),
-    TJS_CFUNC_DEF("setHighlightDates", 0, NativeCompSetHightLights),
-    TJS_CFUNC_DEF("setToday", 0, NativeCompSetToday),
-    TJS_CFUNC_DEF("setShownMonth", 0, NativeCompSetShownMonth),
+    TJS_CFUNC_DEF("setHighlightDates", 2, NativeCompSetHightLights),
+    TJS_CFUNC_DEF("setToday", 3, NativeCompSetToday),
+    TJS_CFUNC_DEF("setShownMonth", 2, NativeCompSetShownMonth),
     TJS_CFUNC_DEF("moveToFront", 0, NativeCompMoveToFront),
     TJS_CFUNC_DEF("moveToBackground", 0, NativeCompMoveToBackground),
     TJS_CFUNC_DEF("scrollIntoView", 0, NativeCompScrollIntoView),
