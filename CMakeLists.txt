@@ -7,6 +7,7 @@ set(LV_CONF_PATH ${CMAKE_CURRENT_SOURCE_DIR}/deps/lv_conf.h CACHE INTERNAL "LV_C
 
 set(BUILD_NATIVE OFF CACHE BOOL "Build wasm3 with native support")
 set(BUILD_LVGL_SIMULATOR OFF CACHE BOOL "Build as lvgl simulator")
+set(BUILD_TXIKI_EXECUTABLE OFF CACHE BOOL "Build txiki executable")
 
 find_path(LVGL_PATH lvgl.h PATHS ${CMAKE_CURRENT_SOURCE_DIR}/deps PATH_SUFFIXES lvgl)
 
@@ -103,7 +104,11 @@ else()
     )
 endif()
 
-add_subdirectory(deps/txiki EXCLUDE_FROM_ALL)
+if (BUILD_TXIKI_EXECUTABLE)
+    add_subdirectory(deps/txiki)
+else()
+    add_subdirectory(deps/txiki EXCLUDE_FROM_ALL)
+endif()
 add_subdirectory(deps/lvgl EXCLUDE_FROM_ALL)
 add_subdirectory(deps/lv_drivers EXCLUDE_FROM_ALL)
 
