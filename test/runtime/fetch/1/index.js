@@ -1,4 +1,4 @@
-const assert = require('assert')
+import assert from 'tjs:assert'
 
 async function basicFetch() {
     const r = await fetch('https://httpbin.org/get');
