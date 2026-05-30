@@ -26,5 +26,11 @@ function build(pattern){
   }
 }
 
-build('demo/*/*.{jsx,tsx}')
-build('test/**/*.{jsx,tsx}')
+const target = process.argv[2];
+
+if (target === 'ui') {
+  build('src/render/react/index.ts')
+} else {
+  build('demo/*/*.{jsx,tsx}')
+  build('test/**/*.{jsx,tsx}')
+}
