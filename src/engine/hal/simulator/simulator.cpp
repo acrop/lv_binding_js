@@ -21,11 +21,10 @@ void hal_init(void) {
     lv_indev_t * keyboard = lv_sdl_keyboard_create();
     lv_indev_set_group(keyboard, lv_group_get_default());
 
-    /* Give the built-in fonts a full-coverage CJK fallback (loaded from a system
-     * TTF) and use a fallback-enabled font as the global theme font so Chinese
-     * renders everywhere by default.
+    /* Give the built-in fonts the SimSun CJK fallback and use a fallback-enabled
+     * font as the global theme font so Chinese renders everywhere by default.
      * builtin_font_list[3] == montserrat_14 (matches LV_FONT_DEFAULT). */
-    InitBuiltinFonts("C:/Windows/Fonts/simhei.ttf");
+    InitBuiltinFonts();
 
     lv_theme_t * th = lv_theme_default_init(disp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), LV_THEME_DEFAULT_DARK, &builtin_font_list[3]);
     lv_display_set_theme(disp, th);
