@@ -33,8 +33,10 @@ uint8_t* GetImgDesc (uint8_t* buf, size_t len, lv_img_dsc_t_1* image_desc) {
     image_desc->type = image_type;
 
     image_desc->header.magic = LV_IMAGE_HEADER_MAGIC;
+    image_desc->header.flags = 0;
     image_desc->header.w = width;
     image_desc->header.h = height;
+    image_desc->header.stride = width * LV_COLOR_NATIVE_WITH_ALPHA_SIZE;
     image_desc->header.cf = LV_COLOR_FORMAT_NATIVE_WITH_ALPHA;
     image_desc->data_size = width * height * LV_COLOR_NATIVE_WITH_ALPHA_SIZE;
     image_desc->data = img_data;
