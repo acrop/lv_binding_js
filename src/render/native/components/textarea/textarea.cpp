@@ -1,5 +1,6 @@
 
 #include "textarea.hpp"
+#include "pinyin_dict.h"
 
 Textarea::Textarea(std::string uid, lv_obj_t* parent): BasicComponent(uid) {
     this->type = COMP_TYPE_TEXTAREA;
@@ -36,6 +37,10 @@ void Textarea::raiseKeyboard (lv_event_t* event) {
      * textarea. */
     lv_obj_t* ime = lv_ime_pinyin_create(lv_layer_top());
     comp->pinyin_ime = ime;
+    /* Replace LVGL's incomplete built-in thesaurus with the full common GB2312
+     * dictionary so every syllable rendered by lv_font_msyh_16 (e.g. "lan" ->
+     * 蓝) is available as a candidate. Must be set before set_keyboard. */
+    lv_ime_pinyin_set_dict(ime, (lv_pinyin_dict_t*)acrop_pinyin_dict);
     lv_ime_pinyin_set_keyboard(ime, keyboard);
 #endif
 

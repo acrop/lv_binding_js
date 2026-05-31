@@ -62,6 +62,7 @@ add_executable(lvgljs
     src/render/native/components/keyboard/keyboard_wrap.cpp
     src/render/native/components/textarea/textarea.cpp
     src/render/native/components/textarea/textarea_wrap.cpp
+    src/render/native/components/textarea/pinyin_dict.c
     src/render/native/components/switch/switch.cpp
     src/render/native/components/switch/switch_wrap.cpp
     src/render/native/components/slider/slider.cpp
@@ -83,7 +84,13 @@ add_executable(lvgljs
 
 if(BUILD_LVGL_SIMULATOR)
     if (MSVC)
+        # Use target_compile_options (not add_compile_options): the lvgljs target
+        # is created earlier in this file, and add_compile_options only affects
+        # targets defined after it is called, so the flag would be ignored and
+        # UTF-8 source literals (e.g. the Chinese pinyin dictionary) would be
+        # misread under the system codepage (C2001).
         add_compile_options("/utf-8")
+        target_compile_options(lvgljs PRIVATE "/utf-8")
         target_compile_definitions(lvgljs PRIVATE WIN32_LEAN_AND_MEAN)
     else()
         add_compile_options(-Wno-error=unused-but-set-variable)

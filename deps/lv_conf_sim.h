@@ -493,7 +493,7 @@
 #define LV_FONT_MONTSERRAT_28_COMPRESSED 0  /*bpp = 3*/
 #define LV_FONT_DEJAVU_16_PERSIAN_HEBREW 0  /*Hebrew, Arabic, Persian letters and all their forms*/
 #define LV_FONT_SIMSUN_14_CJK            0  /*1000 most common CJK radicals*/
-#define LV_FONT_SIMSUN_16_CJK            1  /*1000 most common CJK radicals*/
+#define LV_FONT_SIMSUN_16_CJK            0  /*1000 most common CJK radicals*/
 
 /*Pixel perfect monospace fonts*/
 #define LV_FONT_UNSCII_8  0
@@ -502,12 +502,13 @@
 /*Optionally declare custom fonts here.
  *You can use these fonts as default font too and they will be available globally.
  *E.g. #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)*/
-#define LV_FONT_CUSTOM_DECLARE
+#define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(lv_font_msyh_16)
 
 /*Always set a default font*/
-/* SimSun includes ASCII + ~1000 common CJK glyphs, so using it as the global
- * default lets every widget render Chinese without any code changes. */
-#define LV_FONT_DEFAULT &lv_font_simsun_16_cjk
+/* Microsoft YaHei (msyh) 16px covers ASCII + the full common GB2312 Chinese
+ * set, so using it as the global default makes every widget (including the
+ * Pinyin IME candidate panel) render Chinese with no code changes. */
+#define LV_FONT_DEFAULT &lv_font_msyh_16
 
 /*Enable handling large font and/or fonts with a lot of characters.
  *The limit depends on the font size, font face and bpp.
@@ -515,6 +516,9 @@
 #define LV_FONT_FMT_TXT_LARGE 0
 
 /*Enables/disables support for compressed fonts.*/
+/* lv_font_msyh_16 is now generated uncompressed (--no-compress, bitmap_format = 0)
+ * and no other linked font uses compression, so the decompression path is not
+ * needed. */
 #define LV_USE_FONT_COMPRESSED 0
 
 /*Enable drawing placeholders when glyph dsc is not found*/
@@ -921,7 +925,10 @@
 #if LV_USE_IME_PINYIN
     /*1: Use default thesaurus*/
     /*If you do not use the default thesaurus, be sure to use `lv_ime_pinyin` after setting the thesaurus*/
-    #define LV_IME_PINYIN_USE_DEFAULT_DICT 1
+    /* Disabled: we ship a full GB2312 dictionary (acrop_pinyin_dict) registered
+     * in textarea.cpp via lv_ime_pinyin_set_dict(), so the built-in incomplete
+     * thesaurus is not needed and would only waste flash. */
+    #define LV_IME_PINYIN_USE_DEFAULT_DICT 0
     /*Set the maximum number of candidate panels that can be displayed*/
     /*This needs to be adjusted according to the size of the screen*/
     #define LV_IME_PINYIN_CAND_TEXT_NUM 6
