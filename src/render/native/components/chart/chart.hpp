@@ -24,6 +24,16 @@ class Chart final : public BasicComponent {
   std::vector<std::string> top_axis_labels;
   std::vector<std::string> bottom_axis_labels;
 
+  std::vector<const char*> left_axis_label_cstrs;
+  std::vector<const char*> right_axis_label_cstrs;
+  std::vector<const char*> top_axis_label_cstrs;
+  std::vector<const char*> bottom_axis_label_cstrs;
+
+  lv_obj_t * scale_left = nullptr;
+  lv_obj_t * scale_right = nullptr;
+  lv_obj_t * scale_top = nullptr;
+  lv_obj_t * scale_bottom = nullptr;
+
   void setLeftAxisRange (int32_t min, int32_t max);
   void setRightAxisRange (int32_t min, int32_t max);
   void setTopAxisRange (int32_t min, int32_t max);
@@ -33,8 +43,6 @@ class Chart final : public BasicComponent {
   void setRightAxisLabels (std::vector<std::string>& labels);
   void setBottomAxisLabels (std::vector<std::string>& labels);
   void setTopAxisLabels (std::vector<std::string>& labels);
-
-  static void draw_event_cb (lv_event_t * e);
 
   void setType (int32_t type);
 
