@@ -1,0 +1,115 @@
+name: Build & Test
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libffi-dev libsdl2-dev xvfb
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build the React UI bindings
+        run: yarn build:ui
+      - name: Bundle demos and tests
+        run: yarn bundle
+      - name: Configure
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_LVGL_SIMULATOR=ON
+      - name: Build lvgljs
+        run: cmake --build build -j
+      - name: Run tests
+        run: xvfb-run -a build/lvgljs run scripts/run-tests.js
+
+  macos:
+    name: macOS
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install system dependencies
+        run: brew install ninja sdl2 libffi
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build the React UI bindings
+        run: yarn build:ui
+      - name: Bundle demos and tests
+        run: yarn bundle
+      - name: Configure
+        run: >
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_LVGL_SIMULATOR=ON
+          -DCMAKE_PREFIX_PATH="$(brew --prefix sdl2);$(brew --prefix libffi)"
+      - name: Build lvgljs
+        run: cmake --build build -j
+      - name: Run tests
+        run: build/lvgljs run scripts/run-tests.js
+
+  windows:
+    name: Windows
+    runs-on: windows-2025
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows-static
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}\vcpkg-binary-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Resolve vcpkg revision
+        id: vcpkg
+        shell: pwsh
+        run: |
+          $rev = git -C "$env:VCPKG_INSTALLATION_ROOT" rev-parse HEAD
+          "rev=$rev" >> $env:GITHUB_OUTPUT
+      - name: Prepare vcpkg binary cache directory
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force -Path "$env:VCPKG_DEFAULT_BINARY_CACHE" | Out-Null
+      - name: Cache vcpkg binary artifacts
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: vcpkg-${{ runner.os }}-${{ steps.vcpkg.outputs.rev }}-${{ hashFiles('.github/workflows/build.yml') }}
+          restore-keys: |
+            vcpkg-${{ runner.os }}-${{ steps.vcpkg.outputs.rev }}-
+            vcpkg-${{ runner.os }}-
+      - name: Install vcpkg dependencies
+        run: vcpkg install curl:x64-windows-static zlib:x64-windows-static libffi:x64-windows-static sdl2:x64-windows-static
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build the React UI bindings
+        run: yarn build:ui
+      - name: Bundle demos and tests
+        run: yarn bundle
+      - name: Configure
+        run: >
+          cmake -B build
+          -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+          -DVCPKG_TARGET_TRIPLET=x64-windows-static
+          -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>
+          -DBUILD_LVGL_SIMULATOR=ON
+      - name: Build lvgljs
+        run: cmake --build build --config Release
+      - name: Run tests
+        run: build/Release/lvgljs.exe run scripts/run-tests.js

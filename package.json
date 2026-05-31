@@ -9,6 +9,7 @@
   "scripts": {
     "sim": "./build/lvgljs run",
     "sim:watch": "nodemon --watch 'demo/**/*.js' --ext 'js' --exec 'npm run sim'",
+    "build:ui": "node ./build.js ui",
     "bundle": "node ./build.js",
     "bundle:watch": "nodemon --watch 'demo/**/*.jsx' --watch 'test/**/*.jsx' --ext 'jsx' --exec 'npm run bundle'",
     "fmt": "prettier -w src/render/react"
