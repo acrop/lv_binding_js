@@ -1,8 +1,6 @@
 
 #include "textarea.hpp"
 
-#include "native/core/style/font/font.hpp"
-
 Textarea::Textarea(std::string uid, lv_obj_t* parent): BasicComponent(uid) {
     this->type = COMP_TYPE_TEXTAREA;
     this->uid = uid;
@@ -39,13 +37,6 @@ void Textarea::raiseKeyboard (lv_event_t* event) {
     lv_obj_t* ime = lv_ime_pinyin_create(lv_layer_top());
     comp->pinyin_ime = ime;
     lv_ime_pinyin_set_keyboard(ime, keyboard);
-
-    /* The IME and its candidate panel live on the top layer, which only carries
-     * the Latin-only LV_FONT_DEFAULT. Give them a CJK-fallback font explicitly
-     * (builtin_font_list[4] == montserrat_16 + TTF fallback) so the Chinese
-     * candidates render instead of showing placeholder boxes. */
-    lv_obj_set_style_text_font(ime, &builtin_font_list[4], 0);
-    lv_obj_set_style_text_font(lv_ime_pinyin_get_cand_panel(ime), &builtin_font_list[4], 0);
 #endif
 
     lv_obj_update_layout(lv_layer_top());   /*Be sure the sizes are recalculated*/

@@ -1,7 +1,5 @@
 #include "./simulator.hpp"
 
-#include "native/core/style/font/font.hpp"
-
 extern "C" {
 
 LV_IMG_DECLARE(mouse_cursor_icon); /*Declare the image file.*/
@@ -21,12 +19,7 @@ void hal_init(void) {
     lv_indev_t * keyboard = lv_sdl_keyboard_create();
     lv_indev_set_group(keyboard, lv_group_get_default());
 
-    /* Give the built-in fonts the SimSun CJK fallback and use a fallback-enabled
-     * font as the global theme font so Chinese renders everywhere by default.
-     * builtin_font_list[3] == montserrat_14 (matches LV_FONT_DEFAULT). */
-    InitBuiltinFonts();
-
-    lv_theme_t * th = lv_theme_default_init(disp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), LV_THEME_DEFAULT_DARK, &builtin_font_list[3]);
+    lv_theme_t * th = lv_theme_default_init(disp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), LV_THEME_DEFAULT_DARK, LV_FONT_DEFAULT);
     lv_display_set_theme(disp, th);
 
     /*Set a cursor for the mouse*/
